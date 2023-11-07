@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
-# import environ
-# from dotenv import load_dotenv
+import environ
+from dotenv import load_dotenv
 from pathlib import Path
 
-# environ.Env.read_env()
-# load_dotenv()
+environ.Env.read_env()
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -98,11 +98,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'currency_info',  # os.environ.get('DB_NAME'),
-        'USER': 'postgres',  # os.environ.get('DB_USER'),
-        'PASSWORD': 'admin',  # os.environ.get('DB_PASSWORD'),
-        'HOST': 'localhost',  # os.environ.get('DB_HOST'),
-        'PORT': '5432',  # os.environ.get('DB_PORT'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
@@ -153,7 +153,7 @@ CRON_CLASSES = [
 ]
 
 Q_CLUSTER = {
-    'name': 'core',
+    'name': 'redis',
     'workers': 8,
     'recycle': 500,
     'timeout': 60,
