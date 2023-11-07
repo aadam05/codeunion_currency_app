@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
-import environ
-from dotenv import load_dotenv
+# import environ
+# from dotenv import load_dotenv
 from pathlib import Path
 
-environ.Env.read_env()
-load_dotenv()
+# environ.Env.read_env()
+# load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,8 +48,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_yasg',
     'django_cron', 
-    'currency_info',
+    'django_q',
     'cron_app',
+    'currency_info',
 ]
 
 MIDDLEWARE = [
@@ -97,11 +98,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
+        'NAME': 'currency_info',  # os.environ.get('DB_NAME'),
+        'USER': 'postgres',  # os.environ.get('DB_USER'),
+        'PASSWORD': 'admin',  # os.environ.get('DB_PASSWORD'),
+        'HOST': 'localhost',  # os.environ.get('DB_HOST'),
+        'PORT': '5432',  # os.environ.get('DB_PORT'),
     }
 }
 
@@ -130,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "Asia/Almaty"
 
 USE_I18N = True
 
@@ -147,10 +148,23 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CRONS = [
-  'cron_app.cron.update_currency_rates_cron',
-]
-
 CRON_CLASSES = [
     "cron_app.cron.UpdateCurrencyRatesCronJob",
 ]
+
+Q_CLUSTER = {
+    'name': 'core',
+    'workers': 8,
+    'recycle': 500,
+    'timeout': 60,
+    'compress': True,
+    'cpu_affinity': 1,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'label': 'Django Q',
+    'redis': {
+        'host': '127.0.0.1',
+        'port': 6379,
+        'db': 0,
+    }
+}
