@@ -6,7 +6,6 @@ from django_q.tasks import async_task
 
 
 def update_currency_rates():
-    print('HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
     url = 'http://www.nationalbank.kz/rss/rates_all.xml'
     response = requests.get(url)
     
@@ -22,15 +21,16 @@ def update_currency_rates():
             currency.save()
 
 
+def print_result(task):
+    print(task.result)
+
+
 class UpdateCurrencyRatesCronJob(CronJobBase):
     RUN_EVERY_MINS = 1
 
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'cron_app.update_currency_rates_cron_job'
+    code = 'cron_app.UpdateCurrencyRatesCronJob'
 
     def do(self):
         async_task(update_currency_rates, hook=print_result)
         # update_currency_rates()
-
-def print_result(task):
-    print(task.result)
