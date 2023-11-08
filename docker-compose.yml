@@ -16,12 +16,25 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   web:
     build: .
-    command: sh -c "python manage.py migrate && python manage.py runcrons && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "systemctl start cron && python manage.py migrate && python manage.py crontab add && python manage.py runserver 0.0.0.0:8000 | python manage.py qcluster"
     ports:
       - "8000:8000"
     depends_on:
+      redis:
+        condition: service_healthy
       db:
         condition: service_healthy
 

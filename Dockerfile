@@ -1,5 +1,10 @@
 FROM python:3.11
 
+RUN apt-get update \
+    && apt-get -y upgrade \
+    && apt-get -y install cron \
+    && apt-get -y install systemctl
+
 WORKDIR /opt/currency_app
 
 ENV PYTHONDONTWRITEBYTECODE 1
