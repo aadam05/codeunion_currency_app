@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
-    'django_cron', 
+    'django_crontab',
     'django_q',
     'cron_app',
     'currency_info',
@@ -148,8 +148,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CRON_CLASSES = [
-    "cron_app.cron.UpdateCurrencyRatesCronJob",
+CRONJOBS = [
+    ('*/1 * * * *', 'cron_app.cron.update_currency_rates_cron_job')
 ]
 
 Q_CLUSTER = {

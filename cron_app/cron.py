@@ -1,4 +1,3 @@
-from django_cron import CronJobBase, Schedule
 import requests
 from bs4 import BeautifulSoup
 from currency_info.models import Currency
@@ -24,13 +23,6 @@ def update_currency_rates():
 def print_result(task):
     print(task.result)
 
-
-class UpdateCurrencyRatesCronJob(CronJobBase):
-    RUN_EVERY_MINS = 1
-
-    schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'cron_app.UpdateCurrencyRatesCronJob'
-
-    def do(self):
-        async_task(update_currency_rates, hook=print_result)
-        # update_currency_rates()
+def update_currency_rates_cron_job():
+    async_task(update_currency_rates, hook=print_result)
+    # update_currency_rates() ДЛЯ ТЕСТА
